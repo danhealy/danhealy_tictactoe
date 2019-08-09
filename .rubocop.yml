@@ -1,2 +1,13 @@
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Metrics/BlockLength:
+  ExcludedMethods: ['define', 'factory', 'describe', 'context']
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'spec/**/*_factory.rb'
+
+Style/SymbolArray:
+  Exclude:
+    - 'spec/**/*_factory.rb'

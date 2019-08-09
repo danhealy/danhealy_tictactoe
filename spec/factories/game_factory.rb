@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength, Style/BlockDelimiters, Style/SymbolArray
 FactoryBot.define do
   factory :game do
     active_player { :x }
@@ -35,4 +34,3 @@ FactoryBot.define do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength, Style/BlockDelimiters, Style/SymbolArray

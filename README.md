@@ -14,6 +14,14 @@ Uses [tty-prompt](https://github.com/piotrmurach/tty-prompt) gem for terminal in
 
 Run tests using `rspec`
 
+Rubocop is available: `rubocop`
+
+Test coverage is available:
+```
+$ rspec
+$ open coverage/index.html
+```
+
 ***
 
 Dan Healy, 2019
