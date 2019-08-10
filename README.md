@@ -5,8 +5,14 @@
 
 ## Usage
 
-tbd
+To run, make sure you have the required Ruby version 2.6.3 installed.
 
+Then, run `bundle install`
+
+Finally, run `ruby tictactoe.rb`
+
+
+You'll be asked to choose a player, and then you'll take turns against a random AI opponent.  When the game ends, it will announce whether or not you've won, and ask if you'd like to play again.  Saying `N` at this point, or typing `Ctrl-C` at any point, will end the session.
 
 ## Implementation details
 
@@ -21,6 +27,8 @@ Test coverage is available:
 $ rspec
 $ open coverage/index.html
 ```
+
+TODO: I still need to implement tests for the Terminal class, and possibly implement a better AI opponent.
 
 ***
 
