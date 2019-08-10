@@ -28,6 +28,21 @@ describe GamePresenter do
     end
   end
 
+  describe "#move_to_index" do
+    [["A1", [0, 0]], ["B2", [1, 1]], ["A3", [2, 0]]].each do |(text, idx)|
+      it "should convert #{text} into #{idx}" do
+        expect(new_game.move_to_index(text)).to eq(idx)
+      end
+    end
+  end
+
+  describe "#take_turn" do
+    it "should call #mark on the Game" do
+      expect(new_game.__getobj__).to receive(:mark).with(1, 1)
+      new_game.take_turn("B2")
+    end
+  end
+
   describe "#square_character" do
     it "returns a space if given nil" do
       expect(won.square_character(nil)).to eq(" ")

@@ -10,6 +10,17 @@ class GamePresenter < SimpleDelegator
     end
   end
 
+  # Converts text move into state index (e.g. 'B2' -> [1,1])
+  def move_to_index(move)
+    flattened_index = MOVE_NAMES.index(move)
+    [flattened_index / 3, flattened_index % 3]
+  end
+
+  # A convenience to call take_turn using the text move syntax
+  def take_turn(move)
+    super(*move_to_index(move))
+  end
+
   # Provides character substitution for expected square values :x, :o and nil
   def square_character(square_val)
     case square_val
@@ -27,7 +38,7 @@ class GamePresenter < SimpleDelegator
     end
   end
 
-  # Prints out the entire game board
+  # Returns a string representing the entire game board
   def to_s
     separator = "  +---+---+---+\n"
     string = "    A   B   C  \n" + separator
