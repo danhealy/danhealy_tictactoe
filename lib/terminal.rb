@@ -9,35 +9,76 @@ class Terminal
   end
 
   def run
-    prompt.say "Welcome to Tic-Tac-Toe"
-
+    @prompt.say "Welcome to Tic-Tac-Toe"
     new_game
+    @prompt.say "Thanks for playing."
   end
 
   def new_game
-    @cur_game = GamePresenter.new(Game.new)
+    loop do
+      @cur_game = GamePresenter.new(Game.new)
 
-    player = prompt.yes? "Which player do you want to be?" do |q|
-      q.default "X"
-      q.positive "X"
-      q.negative "O"
+      choose_player
+      play_game
+
+      break unless @prompt.yes? "Play again?"
     end
-    player = player ? :x : :o
+  end
 
-    prompt.say "You're player #{player.to_s.upcase}."
+  def choose_player
+    @player = @prompt.yes? "Which player do you want to be?" do |q|
+      q.default "X"
+      q.suffix "X/o"
+    end
 
-    play_game
+    @player = @player ? :x : :o
+    @cur_game.ai_take_turn if @player == :o
+
+    @prompt.say "You're player #{@player.to_s.upcase}."
   end
 
   def play_game
-    puts cur_game.to_s
-    #prompt.say cur_game.to_s
+    loop do
+      @prompt.say @cur_game.to_s
 
-    marked = prompt.ask("Which square do you want to mark?").upcase
+      return if check_result(@cur_game.take_turn(select_move))
+      return if check_result(@cur_game.ai_take_turn)
+    end
+  end
 
-    prompt.suggest(marked.chars.first, cur_game.available_moves, indent: 2)
+  def select_move
+    moves = @cur_game.available_moves
+    marked = nil
+    until moves.include? marked
+      marked = @prompt.ask("Which square do you want to mark?").upcase
+      break if moves.include? marked
 
-    prompt.ok "Green!"
-    prompt.error "Red!"
+      suggest_moves(marked, moves)
+    end
+    marked
+  end
+
+  def suggest_moves(marked, moves)
+    first_char = marked.chars.first
+    if %w[A B C].include? first_char
+      @prompt.suggest(marked, moves, indent: 2)
+    else
+      @prompt.say "Available moves: #{moves.join(' ')}"
+    end
+  end
+
+  def check_result(move) # rubocop:disable Metrics/MethodLength
+    player_move = @cur_game.active_player == @player
+    case move
+    when :win
+      if player_move
+        @prompt.ok "You've won!"
+      else
+        @prompt.error "The computer wins!"
+      end
+    when :draw
+      @prompt.warn "The game is a draw!"
+    end
+    %i[win draw].include? move
   end
 end

@@ -21,6 +21,11 @@ class GamePresenter < SimpleDelegator
     super(*move_to_index(move))
   end
 
+  def ai_take_turn
+    ai_chosen_square = available_moves.sample # FIXME: Add real AI!
+    take_turn(ai_chosen_square)
+  end
+
   # Provides character substitution for expected square values :x, :o and nil
   def square_character(square_val)
     case square_val

@@ -43,6 +43,13 @@ describe GamePresenter do
     end
   end
 
+  describe "#ai_take_turn" do
+    it "should call #take_turn" do
+      expect(new_game.__getobj__).to receive(:take_turn)
+      new_game.ai_take_turn
+    end
+  end
+
   describe "#square_character" do
     it "returns a space if given nil" do
       expect(won.square_character(nil)).to eq(" ")

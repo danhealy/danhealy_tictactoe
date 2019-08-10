@@ -11,6 +11,7 @@ class Game
     @active_player = :x
   end
 
+  # NOTE: For a larger project, I'd consider breaking this out into a service
   # Marks a square and returns game status: win, draw, or next player
   def take_turn(col, row)
     mark(col, row)
@@ -31,8 +32,8 @@ class Game
 
   # Returns the state as an array of possible winning square combinations
   def win_combinations
-    diagonals = (0..2).map { |i| [state[i][i], state[2 - i][i]] }.transpose
-    (diagonals + state + state.transpose)
+    diagonals = (0..2).map { |i| [@state[i][i], @state[2 - i][i]] }.transpose
+    (diagonals + @state + @state.transpose)
   end
 
   def check_for_win
@@ -43,7 +44,7 @@ class Game
 
   # Expect check_for_win to run prior to this
   def check_for_draw
-    state.flatten.compact.length == 9
+    @state.flatten.compact.length == 9
   end
 
   def toggle_active
