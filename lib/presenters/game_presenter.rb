@@ -4,7 +4,7 @@
 class GamePresenter < SimpleDelegator
   MOVE_NAMES = %w[A1 B1 C1 A2 B2 C2 A3 B3 C3].freeze
 
-  def available_moves
+  def available_move_names
     state.flatten.each_with_object([]).with_index do |(square, result), idx|
       result << MOVE_NAMES[idx] if square.nil?
     end
@@ -12,18 +12,12 @@ class GamePresenter < SimpleDelegator
 
   # Converts text move into state index (e.g. 'B2' -> [1,1])
   def move_to_index(move)
-    flattened_index = MOVE_NAMES.index(move)
-    [flattened_index / 3, flattened_index % 3]
+    Game.index_to_row_column(MOVE_NAMES.index(move))
   end
 
   # A convenience to call take_turn using the text move syntax
-  def take_turn(move)
-    super(*move_to_index(move))
-  end
-
-  def ai_take_turn
-    ai_chosen_square = available_moves.sample # FIXME: Add real AI!
-    take_turn(ai_chosen_square)
+  def take_turn_by_name(move)
+    take_turn(*move_to_index(move))
   end
 
   # Provides character substitution for expected square values :x, :o and nil
@@ -36,7 +30,7 @@ class GamePresenter < SimpleDelegator
     end
   end
 
-  # Returns the state as a flattened array, substituing characters
+  # Returns the state as a flattened array, substituting characters
   def state_string
     state.flatten.each_with_object([]) do |square, result|
       result << square_character(square)

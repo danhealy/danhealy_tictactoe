@@ -10,21 +10,21 @@ describe GamePresenter do
     expect(new_game.__getobj__).to be_a Game
   end
 
-  describe "#available_moves" do
+  describe "#available_move_names" do
     it "lists all moves on a new game" do
-      expect(new_game.available_moves).to eq(GamePresenter::MOVE_NAMES)
+      expect(new_game.available_move_names).to eq(GamePresenter::MOVE_NAMES)
     end
 
     it "does not list taken squares" do
-      expect(in_progress.available_moves).not_to include("B2")
+      expect(in_progress.available_move_names).not_to include("B2")
     end
 
     it "lists available squares" do
-      expect(in_progress.available_moves).to include("A1")
+      expect(in_progress.available_move_names).to include("A1")
     end
 
     it "returns an empty array if there are no moves" do
-      expect(draw.available_moves).to eq([])
+      expect(draw.available_move_names).to eq([])
     end
   end
 
@@ -36,17 +36,10 @@ describe GamePresenter do
     end
   end
 
-  describe "#take_turn" do
+  describe "#take_turn_by_name" do
     it "should call #mark on the Game" do
-      expect(new_game.__getobj__).to receive(:mark).with(1, 1)
-      new_game.take_turn("B2")
-    end
-  end
-
-  describe "#ai_take_turn" do
-    it "should call #take_turn" do
-      expect(new_game.__getobj__).to receive(:take_turn)
-      new_game.ai_take_turn
+      expect(new_game.__getobj__).to receive(:take_turn).with(1, 1)
+      new_game.take_turn_by_name("B2")
     end
   end
 

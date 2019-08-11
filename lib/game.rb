@@ -2,32 +2,78 @@
 
 # Contains the state and logic for a Tic-Tac-Toe game.
 class Game
-  attr_accessor :state, :active_player
+  attr_accessor :state, :active_player, :player, :difficulty, :winner, :over
 
   WIN_CONDITIONS = %i[x o].map { |i| [i].cycle(3).to_a }.freeze
 
-  def initialize
+  DIFFICULTIES = %i[easy hard unbeatable].freeze
+
+  # To convert a flattened state index into a row/column index
+  def self.index_to_row_column(idx)
+    [idx / 3, idx % 3]
+  end
+
+  def initialize(player = :x, difficulty = DIFFICULTIES.first)
     @state = Array.new(3) { Array.new(3) }
     @active_player = :x
+    @player = player
+    @difficulty = difficulty
   end
 
   # NOTE: For a larger project, I'd consider breaking this out into a service
   # Marks a square and returns game status: win, draw, or next player
-  def take_turn(col, row)
-    mark(col, row)
-    if check_for_win
-      :win
-    elsif check_for_draw
-      :draw
-    else
-      toggle_active
+  def take_turn(row, col)
+    mark(row, col)
+    toggle_active
+    game_status
+  end
+
+  def game_status
+    ret = if check_for_win
+            :win
+          elsif check_for_draw
+            :draw
+          else
+            @active_player
+          end
+    @over = %i[win draw].include? ret
+    ret
+  end
+
+  def over?
+    @over == true
+  end
+
+  def player_is_active?
+    @active_player == @player
+  end
+
+  def player_won?
+    @winner == @player
+  end
+
+  def computer_player
+    (%i[x o] - [@player]).first
+  end
+
+  def available_indexes
+    @state.flatten.each_with_object([]).with_index do |(square, result), idx|
+      result << Game.index_to_row_column(idx) if square.nil?
     end
+  end
+
+  alias available_moves available_indexes
+
+  def copy
+    new_game = dup
+    new_game.state = @state.map(&:dup)
+    new_game
   end
 
   private
 
-  def mark(col, row)
-    @state[col][row] = @active_player
+  def mark(row, col)
+    @state[row][col] = @active_player
   end
 
   # Returns the state as an array of possible winning square combinations
@@ -37,9 +83,9 @@ class Game
   end
 
   def check_for_win
-    win_combinations.find do |ary|
+    @winner = win_combinations.find do |ary|
       WIN_CONDITIONS.include? ary
-    end
+    end&.compact&.first
   end
 
   # Expect check_for_win to run prior to this

@@ -11,3 +11,6 @@ Style/BlockDelimiters:
 Style/SymbolArray:
   Exclude:
     - 'spec/**/*_factory.rb'
+
+Metrics/LineLength:
+  Max: 100
