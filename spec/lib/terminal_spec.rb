@@ -158,5 +158,4 @@ describe Terminal do
       terminal.ai_take_turn
     end
   end
-
 end
