@@ -42,6 +42,4 @@ The `Terminal` class controls all interaction with the human player.  The `Game`
 
 I've implemented the [MinMax algorithm](https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/).  During implementation of this algorithm, I had to refactor the Game class significantly to support introspection and deep copying.
 
-Essentially, the algorithm will create a copy of the game board for each available move, take the move and then call itself with the copy.  The move is evaluated by a score: 1 if it results in the computer winning, -1 if it results in the player winning, 0 for a draw or incomplete game.  At each depth, a maximum score for the active player at that depth is chosen and returned.  This occurs for the first depth of analysis and therefore the computer selects a move which optimizes it's eventual score.
-
-TODO: I still need to implement tests for the Terminal class
+Essentially, the algorithm will create a copy of the game board for each available move, take the move and then call itself with the copy.  The move is evaluated by a score: 1 if it results in the computer winning, -1 if it results in the player winning, 0 for a draw or incomplete game.  At each depth, a maximum score for the active player at that depth is chosen and returned.  This includes the first depth of analysis, and therefore the computer selects an immediate move which optimizes it's eventual score.

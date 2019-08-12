@@ -4,8 +4,8 @@
 class Terminal
   attr_accessor :prompt, :cur_game
 
-  def initialize
-    @prompt = TTY::Prompt.new
+  def initialize(tty = TTY::Prompt.new)
+    @prompt = tty
   end
 
   def run
